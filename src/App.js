@@ -2,6 +2,7 @@ import React from 'react';
 import { loadComics } from './utils/load-comics';
 import { Loader } from './components/Loader';
 import './App.scss';
+import { SearchInput } from './components/SearchInput';
 
 export default class App extends React.Component {
   state = {
@@ -59,10 +60,8 @@ export default class App extends React.Component {
     const { comics, isLoading, selectedComics } = this.state;
     return (
       <div>
+        <SearchInput onChange={this.handleChange}></SearchInput>
         
-        <div className="search-wrapper">
-          <input type="search" className="search-box" placeholder="Pesquisar quadrinho..." onChange={this.handleChange} />
-        </div>
         {
           isLoading && (
             <Loader></Loader>

@@ -1,0 +1,22 @@
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    font-size: 1.4rem;
+    width: 33%;
+    text-align: center;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid #202020;
+
+    &:focus {
+        outline: none;
+        border-color: #e62429;
+    }
+
+    &::placeholder {
+        font-family: "Comic Neue", sans-serif;
+    }
+}
