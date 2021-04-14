@@ -1,17 +1,19 @@
-import React, { useState, useRef, useCallback } from 'react'
-// import { loadComics } from './utils/load-comics';
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import useComicSearch from './utils/use-comic-search';
 import { Loader } from './components/Loader';
 import './App.scss';
 import { SearchInput } from './components/SearchInput';
 import { ComicDetails } from './components/ComicDetails';
-import { Comic } from './components/Comic';
+import { sendMail } from './utils/email-service';
+import { Comics } from './components/Comics';
+import { Footer } from './components/Footer';
 
 export default function App() {
   const [query, setQuery] = useState('');
   const [openedComic, setOpenedComic] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedComics, setSelectedComics] = useState(new Set());
+  const [mailContent, setMailContent] = useState('');
 
   const {
     comics,
@@ -45,6 +47,7 @@ export default function App() {
       selected.add(comic);
     }
     setSelectedComics(selected);
+
   }
 
   const checkSelectedComic = comic => {
@@ -70,11 +73,33 @@ export default function App() {
     setOpenedComic(null);
   }
 
+  const handleSendMail = e => {
+    const form = document.getElementById('emailForm');
+    setTimeout(() => {
+      sendMail(form)
+    }, 500)
+  }
+
+
+  useEffect(() => {
+    const getMailContent = () => {
+      let content = '<ul style="padding: 0; list-style:none;">';
+      selectedComics.forEach(comic => {
+        content += `<li style="margin: 8px;">
+        <img src=${comic.thumbnail.path}.${comic.thumbnail.extension} alt=${comic.title} width="200px" />
+        <br/>
+        <span style="margin: 8px 0;">${comic.title}</span>
+        </li>`;
+      });
+      content += '</ul>';
+      return content;
+    }
+    setMailContent(getMailContent())
+  }, [selectedComics]);
 
   return (
     <div>
       <SearchInput onChange={handleSearch}></SearchInput>
-
       {
         loading && (
           <Loader></Loader>
@@ -89,43 +114,23 @@ export default function App() {
       {
         openedComic && (<ComicDetails comic={openedComic} onClose={handleDetailsClose} onSelect={handleSelectionClose}></ComicDetails>)
       }
-      <ul className="comics-wrapper">
-        {
-          comics.map((comic, index) => {
-            if (comics.length === index + 1) {
-              return (
-                <li ref={lastComicElementRef} key={index} className={"comic" + (checkSelectedComic(comic) ? ' selected' : '')} onClick={() => handleSelection(comic)}>
-                  <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
-                  <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => handleShowDetails(e, comic)}>{comic.title}</a>
-                  {checkSelectedComic(comic)}
-                </li>
-              )
-            } else {
-              return (
-                <li key={index} className={"comic" + (checkSelectedComic(comic) ? ' selected' : '')} onClick={() => handleSelection(comic)}>
-                  <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
-                  <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => handleShowDetails(e, comic)}>{comic.title}</a>
-                  {checkSelectedComic(comic)}
-                </li>
-              )
-            }
-          })}
-      </ul>
+      <Comics
+        comics={comics}
+        lastComicElementRef={lastComicElementRef}
+        checkSelectedComic={checkSelectedComic}
+        handleSelection={handleSelection}
+        handleShowDetails={handleShowDetails}></Comics>
 
       {
         selectedComics.size > 0 && (
-          <div className="footer">
-            <span>{selectedComics.size + (selectedComics.size > 1 ? ' quadrinhos selecionados' : ' quadrinho selecionado')}</span>
-            <button type="button">Enviar por e-mail</button>
-            <button type="button" onClick={handleSelectionCancel}>Cancelar</button>
-          </div>
+          <Footer
+            selectedComics={selectedComics}
+            handleSendMail={handleSendMail}
+            handleSelectionCancel={handleSelectionCancel}
+            mailContent={mailContent}></Footer>
         )
       }
-
-
-
     </div>
-
   )
 
 }
