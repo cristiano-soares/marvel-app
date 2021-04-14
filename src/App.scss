@@ -34,6 +34,10 @@ body {
   &.selected {
     background-color: $marvelBrandColor;
     color: #fff;
+
+    a {
+      color: #FFF;
+    }
   }
 
   .comic-title {
@@ -41,29 +45,6 @@ body {
     font-family: "Comic Neue", sans-serif;
     font-size: 1.5rem;
     text-align: center;
-  }
-}
-
-.search-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.search-box {
-  font-size: 1.4rem;
-  width: 33%;
-  text-align: center;
-  margin: 1rem auto;
-  padding: 0.5rem 1rem;
-  border: 1px solid #202020;
-  
-  &:focus {
-    outline: none;
-    border-color: $marvelBrandColor;
-  }
-
-  &::placeholder {
-    font-family: "Comic Neue", sans-serif;
   }
 }
 
@@ -99,5 +80,12 @@ button {
   &:hover {
     border-color: rgba(255, 255, 255, 0.5);
     background-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
   }
 }

@@ -1,7 +1,7 @@
 import './styles.scss';
 
 export const Loader = () => (
-    <div class="spinner-grow-backdrop">
-        <div class="spinner-grow"></div>
+    <div className="spinner-grow-backdrop">
+        <div className="spinner-grow"></div>
     </div>
 )

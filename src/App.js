@@ -3,12 +3,14 @@ import { loadComics } from './utils/load-comics';
 import { Loader } from './components/Loader';
 import './App.scss';
 import { SearchInput } from './components/SearchInput';
+import { ComicDetails } from './components/ComicDetails';
 
 export default class App extends React.Component {
   state = {
     comics: [],
     selectedComics: new Set(),
-    isLoading: false
+    isLoading: false,
+    openedComic: null
   }
 
   componentDidMount() {
@@ -22,6 +24,7 @@ export default class App extends React.Component {
     await loadComics(query)
       .then(res => {
         const comics = res.data.data.results;
+        console.log(comics[2])
         this.setState({
           comics,
           isLoading: false
@@ -56,12 +59,31 @@ export default class App extends React.Component {
     this.loadComics(query);
   }
 
+  handleShowDetails = (e, comic) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e)
+    this.setState({
+      openedComic: comic
+    })
+  }
+
+  handleDetailsClose = () => {
+    this.setState({
+      openedComic: null
+    })
+  }
+
   render() {
-    const { comics, isLoading, selectedComics } = this.state;
+    const {
+      comics,
+      isLoading,
+      selectedComics,
+      openedComic } = this.state;
     return (
       <div>
         <SearchInput onChange={this.handleChange}></SearchInput>
-        
+
         {
           isLoading && (
             <Loader></Loader>
@@ -69,8 +91,11 @@ export default class App extends React.Component {
         }
         {
           !isLoading && comics.length === 0 && (
-            <h5 className="mt-5">Nenhum quadrinho encontrado</h5>
+            <h5>Nenhum quadrinho encontrado</h5>
           )
+        }
+        {
+          openedComic && (<ComicDetails comic={openedComic} onClose={this.handleDetailsClose}></ComicDetails>)
         }
         {
           !isLoading && comics.length > 0 && (
@@ -80,7 +105,7 @@ export default class App extends React.Component {
                   comic =>
                     <li key={comic.id} className={"comic" + (comic.isSelected ? ' selected' : '')} onClick={() => this.handleSelection(comic)}>
                       <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
-                      <a className="comic-title">{comic.title}</a>
+                      <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => this.handleShowDetails(e, comic)}>{comic.title}</a>
                     </li>
                 )}
             </ul>
