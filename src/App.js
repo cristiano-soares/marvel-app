@@ -1,129 +1,131 @@
-import React from 'react';
-import { loadComics } from './utils/load-comics';
+import React, { useState, useRef, useCallback } from 'react'
+// import { loadComics } from './utils/load-comics';
+import useComicSearch from './utils/use-comic-search';
 import { Loader } from './components/Loader';
 import './App.scss';
 import { SearchInput } from './components/SearchInput';
 import { ComicDetails } from './components/ComicDetails';
+import { Comic } from './components/Comic';
 
-export default class App extends React.Component {
-  state = {
-    comics: [],
-    selectedComics: new Set(),
-    isLoading: false,
-    openedComic: null
+export default function App() {
+  const [query, setQuery] = useState('');
+  const [openedComic, setOpenedComic] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [selectedComics, setSelectedComics] = useState(new Set());
+
+  const {
+    comics,
+    hasMore,
+    loading,
+    error
+  } = useComicSearch(query, pageNumber)
+
+  const observer = useRef()
+  const lastComicElementRef = useCallback(node => {
+    if (loading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPageNumber(prevPageNumber => prevPageNumber + 1)
+      }
+    })
+    if (node) observer.current.observe(node)
+  }, [loading, hasMore])
+
+  function handleSearch(e) {
+    setQuery(e.target.value)
+    setPageNumber(1)
   }
 
-  componentDidMount() {
-    this.loadComics();
-  }
-
-  loadComics = async query => {
-    this.setState({
-      isLoading: true
-    });
-    await loadComics(query)
-      .then(res => {
-        const comics = res.data.data.results;
-        console.log(comics[2])
-        this.setState({
-          comics,
-          isLoading: false
-        });
-      })
-  }
-
-  handleSelection = comic => {
-    const { selectedComics } = this.state;
-    if (selectedComics.has(comic)) {
-      selectedComics.delete(comic);
-      comic.isSelected = false;
+  const handleSelection = comic => {
+    const selected = new Set(selectedComics);
+    if (selected.has(comic)) {
+      selected.delete(comic);
     } else {
-      selectedComics.add(comic);
-      comic.isSelected = true;
+      selected.add(comic);
     }
-    this.setState({
-      selectedComics
-    })
+    setSelectedComics(selected);
   }
 
-  handleSelectionCancel = () => {
-    const { selectedComics } = this.state;
-    selectedComics.forEach(comic => comic.isSelected = false);
-    this.setState({
-      selectedComics: new Set()
-    })
+  const checkSelectedComic = comic => {
+    return selectedComics.has(comic);
+  };
+
+  const handleSelectionClose = () => {
+    handleSelection(openedComic);
+    handleDetailsClose();
   }
 
-  handleChange = e => {
-    const query = e.target.value;
-    this.loadComics(query);
+  const handleSelectionCancel = () => {
+    setSelectedComics(new Set());
   }
 
-  handleShowDetails = (e, comic) => {
+  const handleShowDetails = (e, comic) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e)
-    this.setState({
-      openedComic: comic
-    })
+    setOpenedComic(comic);
   }
 
-  handleDetailsClose = () => {
-    this.setState({
-      openedComic: null
-    })
+  const handleDetailsClose = () => {
+    setOpenedComic(null);
   }
 
-  render() {
-    const {
-      comics,
-      isLoading,
-      selectedComics,
-      openedComic } = this.state;
-    return (
-      <div>
-        <SearchInput onChange={this.handleChange}></SearchInput>
 
-        {
-          isLoading && (
-            <Loader></Loader>
-          )
-        }
-        {
-          !isLoading && comics.length === 0 && (
-            <h5>Nenhum quadrinho encontrado</h5>
-          )
-        }
-        {
-          openedComic && (<ComicDetails comic={openedComic} onClose={this.handleDetailsClose}></ComicDetails>)
-        }
-        {
-          !isLoading && comics.length > 0 && (
-            <ul className="comics-wrapper">
-              {
-                comics.map(
-                  comic =>
-                    <li key={comic.id} className={"comic" + (comic.isSelected ? ' selected' : '')} onClick={() => this.handleSelection(comic)}>
-                      <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
-                      <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => this.handleShowDetails(e, comic)}>{comic.title}</a>
-                    </li>
-                )}
-            </ul>
-          )
-        }
+  return (
+    <div>
+      <SearchInput onChange={handleSearch}></SearchInput>
 
+      {
+        loading && (
+          <Loader></Loader>
+        )
+      }
+      <div>{error && (<h5>Ocorreu um erro ao se comunicar com o servidor da Marvel</h5>)}</div>
+      {
+        !loading && !error && comics.length === 0 && (
+          <h5>Nenhum quadrinho encontrado</h5>
+        )
+      }
+      {
+        openedComic && (<ComicDetails comic={openedComic} onClose={handleDetailsClose} onSelect={handleSelectionClose}></ComicDetails>)
+      }
+      <ul className="comics-wrapper">
         {
-          selectedComics.size > 0 && (
-            <div className="footer">
-              <span>{selectedComics.size + (selectedComics.size > 1 ? ' quadrinhos selecionados' : ' quadrinho selecionado')}</span>
-              <button type="button">Enviar por e-mail</button>
-              <button type="button" onClick={this.handleSelectionCancel}>Cancelar</button>
-            </div>
-          )
-        }
+          comics.map((comic, index) => {
+            if (comics.length === index + 1) {
+              return (
+                <li ref={lastComicElementRef} key={index} className={"comic" + (checkSelectedComic(comic) ? ' selected' : '')} onClick={() => handleSelection(comic)}>
+                  <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
+                  <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => handleShowDetails(e, comic)}>{comic.title}</a>
+                  {checkSelectedComic(comic)}
+                </li>
+              )
+            } else {
+              return (
+                <li key={index} className={"comic" + (checkSelectedComic(comic) ? ' selected' : '')} onClick={() => handleSelection(comic)}>
+                  <img src={comic.thumbnail.path + '.' + comic.thumbnail.extension} alt={comic.title} />
+                  <a href="" className="comic-title" title="Ver detalhes do quadrinho" onClick={e => handleShowDetails(e, comic)}>{comic.title}</a>
+                  {checkSelectedComic(comic)}
+                </li>
+              )
+            }
+          })}
+      </ul>
 
-      </div>
+      {
+        selectedComics.size > 0 && (
+          <div className="footer">
+            <span>{selectedComics.size + (selectedComics.size > 1 ? ' quadrinhos selecionados' : ' quadrinho selecionado')}</span>
+            <button type="button">Enviar por e-mail</button>
+            <button type="button" onClick={handleSelectionCancel}>Cancelar</button>
+          </div>
+        )
+      }
 
-    )
-  }
+
+
+    </div>
+
+  )
+
 }

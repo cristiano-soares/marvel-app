@@ -7,7 +7,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 
     .details-content {
         display: flex;
@@ -17,22 +17,39 @@
         padding: 1rem;
         overflow-y: auto;
         border-radius: 0.2rem;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+        img {
+            max-width: 390px;
+        }
     }
 
     .details-overview {
+        display: flex;
+        flex-flow: column;
         flex: 1;
         margin-left: 1rem;
+    }
 
+    .overview-body {
+        flex: 1;
+        padding: 1rem 0;
         h2 {
             margin-top: 0;
-            text-align: center;
         }
+    }
 
-        button {
-            border-color: #202020;
-            color: #222;
-            font-size: 1.4rem;
+    .overview-footer {
+        margin-top: 1rem;
+        text-align: right;
+    }
+    button {
+        border-color: #b61f24;
+        color: #b61f24;
+
+        &:hover {
+            background-color: #b61f24;
+            color: #fff;
         }
     }
 }
