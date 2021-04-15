@@ -83,11 +83,7 @@ export default function App() {
   return (
     <div className="container">
       <SearchInput onChange={handleSearch}></SearchInput>
-      {
-        loading && (
-          <Loader></Loader>
-        )
-      }
+
 
       {
         openedComic && (
@@ -105,16 +101,10 @@ export default function App() {
         handleShowDetails={handleShowDetails}></Comics>
 
       {
-        (loading && comics.length > 0) && (
-          <div className="spinner-grow spinner-grow-sm loader-inline"></div>
+        loading && (
+          <Loader showBackdrop={comics.length === 0}></Loader>
         )
       }
-      {
-        (!loading && !error && comics.length === 0) && (
-          <h3>Nenhum quadrinho encontrado</h3>
-        )
-      }
-
       {
         error && (
           <h3>Ocorreu um erro ao se comunicar com o servidor da Marvel</h3>
