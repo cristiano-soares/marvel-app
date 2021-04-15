@@ -1,3 +1,4 @@
+$marvelBrandColor: #e62429;
 .details-wrapper {
     position: fixed;
     display: flex;
@@ -44,11 +45,11 @@
         text-align: right;
     }
     button {
-        border-color: #b61f24;
-        color: #b61f24;
+        border-color: $marvelBrandColor;
+        color: $marvelBrandColor;
 
         &:hover {
-            background-color: #b61f24;
+            background-color: $marvelBrandColor;
             color: #fff;
         }
     }

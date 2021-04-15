@@ -14,7 +14,7 @@ const props = {
 
 const imgPath = `${props.comic.thumbnail.path}.${props.comic.thumbnail.extension}`;
 describe('<ComicCard />', () => {
-    it('should set the image path correcly', () => {
+    it('should set the image path correctly', () => {
         render(<ComicCard {...props} />);
         const img = screen.getByRole('img', { src: imgPath });
         expect(img).toBeInTheDocument();
