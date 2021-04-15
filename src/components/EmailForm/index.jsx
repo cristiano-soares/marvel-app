@@ -54,7 +54,7 @@ export function EmailForm({ onCancelSendMail, selectedComics }) {
         <>
             {
                 loading && (
-                    <Loader></Loader>
+                    <Loader backdropColor={true}></Loader>
                 )
             }
             <div className="modal">

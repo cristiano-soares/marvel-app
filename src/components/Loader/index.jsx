@@ -1,7 +1,10 @@
 import './styles.scss';
 
-export const Loader = () => (
-    <div className="spinner-grow-backdrop">
-        <div className="spinner-grow"></div>
-    </div>
-)
+export const Loader = ({backdropColor}) => {
+    const backdropClass = `spinner-grow-backdrop ${backdropColor ? 'backdrop-color' : ''}`;
+    return (
+        <div className={backdropClass}>
+            <div className="spinner-grow"></div>
+        </div>
+    )
+}
