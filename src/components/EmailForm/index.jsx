@@ -41,6 +41,8 @@ export function EmailForm({ onCancelSendMail, selectedComics }) {
         sendMail(form, email).then(() => {
             setLoading(false);
             setEmailSent(true);
+        }).finally(() => {
+            setLoading(false);
         });
     }
 
