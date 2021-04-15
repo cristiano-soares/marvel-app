@@ -2,18 +2,14 @@ $marvelBrandColor: #e62429;
 .search-wrapper {
     display: flex;
     justify-content: center;
+    flex: 1;
 }
 
 .search-box {
     font-size: 1.4rem;
     min-width: 400px;
-    text-align: center;
-    margin: 1rem auto;
+    margin: 1rem;
     padding: 0.5rem 1rem;
+    text-align: center;
     border: 1px solid #202020;
-
-    &:focus {
-        outline: none;
-        border-color: $marvelBrandColor;
-    }
 }

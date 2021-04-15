@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+$marvelBrandColor: #e62429;
 
 body,
 html {
@@ -23,6 +24,10 @@ button {
     border-color: rgba(255, 255, 255, 0.5);
     background-color: rgba(255, 255, 255, 0.18);
   }
+
+  &:focus {
+    outline: 2px solid rgba($marvelBrandColor, 0.8);
+  }
 }
 
 a {
@@ -37,6 +42,10 @@ input {
   ::placeholder {
     font-family: "Comic Neue", sans-serif;
   }
+
+  &:focus {
+    outline: 2px solid rgba($marvelBrandColor, 0.8);
+  }
 }
 
 .container {
@@ -46,7 +55,5 @@ input {
 }
 
 .loader-inline {
-  width: calc(100% - 2rem);
-  text-align: center;
-  padding: 1rem;
+  margin-top: 3rem;
 }

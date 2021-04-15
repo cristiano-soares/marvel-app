@@ -45,10 +45,10 @@ export default function useComicSearch(query, pageNumber) {
         return [...new Set([...prevComics, ...results])];
       });
       setHasMore(results.length > 0);
+      setLoading(false);
     }).catch(e => {
       if (axios.isCancel(e)) return
       setError(true);
-    }).finally(() => {
       setLoading(false);
     });
     return () => cancel()

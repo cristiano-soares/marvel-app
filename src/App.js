@@ -104,8 +104,11 @@ export default function App() {
         handleSelection={handleSelection}
         handleShowDetails={handleShowDetails}></Comics>
 
-      <div className="loader-inline">{(loading && comics.length > 0) && 'Carregando mais...'}</div>
-
+      {
+        (loading && comics.length > 0) && (
+          <div className="spinner-grow spinner-grow-sm loader-inline"></div>
+        )
+      }
       {
         (!loading && !error && comics.length === 0) && (
           <h3>Nenhum quadrinho encontrado</h3>
