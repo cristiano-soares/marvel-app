@@ -18,4 +18,4 @@ Os quadrinhos podem ser selecionados com um clique sobre eles. Para ver detalhes
 
 ## Considerações finais
 
-Por conta da limitação do tempo, optei por não criar os testes unitários e focar na funcionalidade principal. Além disso, a modularização do app pode ser melhorada.
+Por conta da limitação do tempo, optei por criar apenas um teste unitário (ComicCard) apenas para efeito de demonstração do conhecimento em Jest.
