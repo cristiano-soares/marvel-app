@@ -39,6 +39,11 @@ input {
   }
 }
 
+.container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
 
 .loader-inline {
   width: calc(100% - 2rem);

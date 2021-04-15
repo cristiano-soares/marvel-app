@@ -81,23 +81,14 @@ export default function App() {
   }
 
   return (
-    <div>
+    <div className="container">
       <SearchInput onChange={handleSearch}></SearchInput>
       {
         loading && (
           <Loader></Loader>
         )
       }
-      {
-        error && (
-          <h5>Ocorreu um erro ao se comunicar com o servidor da Marvel</h5>
-        )
-      }
-      {
-        !loading && !error && comics.length === 0 && (
-          <h5>Nenhum quadrinho encontrado</h5>
-        )
-      }
+
       {
         openedComic && (
           <ComicDetails
@@ -112,8 +103,20 @@ export default function App() {
         checkSelectedComic={checkSelectedComic}
         handleSelection={handleSelection}
         handleShowDetails={handleShowDetails}></Comics>
-        
+
       <div className="loader-inline">{(loading && comics.length > 0) && 'Carregando mais...'}</div>
+
+      {
+        (!loading && !error && comics.length === 0) && (
+          <h3>Nenhum quadrinho encontrado</h3>
+        )
+      }
+
+      {
+        error && (
+          <h3>Ocorreu um erro ao se comunicar com o servidor da Marvel</h3>
+        )
+      }
 
       {
         selectedComics.size > 0 && (
