@@ -1,0 +1,71 @@
+.modal {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    padding-top: 3rem;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1040;
+
+    .modal-content {
+        display: flex;
+        flex-flow: column;
+        background-color: #fff;
+        width: 30rem;
+        height: 200px;
+        padding: 1rem;
+        overflow-y: auto;
+        border-radius: 0.2rem;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    .modal-body {
+        flex: 1;
+        padding: 2rem 0;
+        form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input {
+                flex: 1;
+                border: 2px solid #202020;
+                color: #222;
+                padding: 0.5rem 1rem;
+
+                &:focus {
+                    outline: #b61f24 auto 2px;
+                }
+            }
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .modal-footer {
+        margin-top: 1rem;
+        text-align: right;
+    }
+    button {
+        border-color: #202020;
+        color: #202020;
+
+        &:hover {
+            background-color: #b61f24;
+            border-color: #b61f24;
+            color: #fff;
+        }
+    }
+}
+
+.mail-form textarea {
+    display: none;
+}

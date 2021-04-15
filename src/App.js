@@ -1,12 +1,12 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import useComicSearch from './utils/use-comic-search';
 import { Loader } from './components/Loader';
 import './App.scss';
 import { SearchInput } from './components/SearchInput';
 import { ComicDetails } from './components/ComicDetails';
-import { sendMail } from './utils/email-service';
 import { Comics } from './components/Comics';
 import { Footer } from './components/Footer';
+import { EmailForm } from './components/EmailForm';
 
 export default function App() {
   const [query, setQuery] = useState('');
@@ -14,6 +14,7 @@ export default function App() {
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedComics, setSelectedComics] = useState(new Set());
   const [mailContent, setMailContent] = useState('');
+  const [showMailForm, setShowMailForm] = useState(false);
 
   const {
     comics,
@@ -22,7 +23,7 @@ export default function App() {
     error
   } = useComicSearch(query, pageNumber)
 
-  const observer = useRef()
+  const observer = useRef();
   const lastComicElementRef = useCallback(node => {
     if (loading) return
     if (observer.current) observer.current.disconnect()
@@ -34,7 +35,7 @@ export default function App() {
     if (node) observer.current.observe(node)
   }, [loading, hasMore])
 
-  function handleSearch(e) {
+  const handleSearch = e => {
     setQuery(e.target.value)
     setPageNumber(1)
   }
@@ -47,7 +48,6 @@ export default function App() {
       selected.add(comic);
     }
     setSelectedComics(selected);
-
   }
 
   const checkSelectedComic = comic => {
@@ -73,22 +73,23 @@ export default function App() {
     setOpenedComic(null);
   }
 
-  const handleSendMail = e => {
-    const form = document.getElementById('emailForm');
-    setTimeout(() => {
-      sendMail(form)
-    }, 500)
+  const handleOpenMailForm = () => {
+    setShowMailForm(true);
+  }
+  const handleCloseMailForm = () => {
+    handleSelectionCancel();
+    setShowMailForm(false);
   }
 
-
   useEffect(() => {
+    // Devido ao serviço de e-mail utilizado, foi necessário incluir o html do corpo do e-mail em uma textarea
     const getMailContent = () => {
       let content = '<ul style="padding: 0; list-style:none;">';
       selectedComics.forEach(comic => {
         content += `<li style="margin: 8px;">
         <img src=${comic.thumbnail.path}.${comic.thumbnail.extension} alt=${comic.title} width="200px" />
         <br/>
-        <span style="margin: 8px 0;">${comic.title}</span>
+        <span style="margin: 8px 0 16px 0;">${comic.title}</span>
         </li>`;
       });
       content += '</ul>';
@@ -125,9 +126,15 @@ export default function App() {
         selectedComics.size > 0 && (
           <Footer
             selectedComics={selectedComics}
-            handleSendMail={handleSendMail}
-            handleSelectionCancel={handleSelectionCancel}
-            mailContent={mailContent}></Footer>
+            onOpenMailForm={handleOpenMailForm}
+            onCancelSelection={handleSelectionCancel}></Footer>
+        )
+      }
+      {
+        showMailForm && (
+          <EmailForm
+            onCancelSendMail={handleCloseMailForm}
+            mailContent={mailContent}></EmailForm>
         )
       }
     </div>
