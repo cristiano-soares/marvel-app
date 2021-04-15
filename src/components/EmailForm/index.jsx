@@ -3,10 +3,11 @@ import { sendMail } from '../../utils/email-service';
 import { Loader } from '../Loader';
 import './styles.scss';
 
-export function EmailForm({ onCancelSendMail, mailContent }) {
+export function EmailForm({ onCancelSendMail, selectedComics }) {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [emailSent, setEmailSent] = useState(false);
+    const [mailContent, setMailContent] = useState('');
 
     useEffect(() => {
         const emailInput = document.getElementById('email');
@@ -15,6 +16,23 @@ export function EmailForm({ onCancelSendMail, mailContent }) {
         }
         emailInput.focus();
     });
+
+    useEffect(() => {
+        // Devido ao serviço de e-mail utilizado, foi necessário incluir o html do corpo do e-mail em uma textarea
+        const getMailContent = () => {
+            let content = '<ul style="padding: 0; list-style:none;">';
+            selectedComics.forEach(comic => {
+                content += `<li style="margin: 8px;">
+            <img src=${comic.thumbnail.path}.${comic.thumbnail.extension} alt=${comic.title} width="200px" />
+            <br/>
+            <span style="margin: 8px 0 16px 0;">${comic.title}</span>
+            </li>`;
+            });
+            content += '</ul>';
+            return content;
+        }
+        setMailContent(getMailContent())
+    }, [selectedComics]);
 
     const handleSendMail = () => {
         setLoading(true);
@@ -40,7 +58,7 @@ export function EmailForm({ onCancelSendMail, mailContent }) {
             <div className="modal">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h2>Enviar quadrinhos para o e-mail</h2>
+                        <h2>Enviar quadrinhos por e-mail</h2>
                     </div>
                     <div className="modal-body">
                         {

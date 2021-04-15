@@ -31,3 +31,17 @@ a {
     text-decoration: underline;
   }
 }
+
+input {
+  font-family: "Comic Neue", sans-serif;
+  ::placeholder {
+    font-family: "Comic Neue", sans-serif;
+  }
+}
+
+
+.loader-inline {
+  width: calc(100% - 2rem);
+  text-align: center;
+  padding: 1rem;
+}

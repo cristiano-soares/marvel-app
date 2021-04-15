@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import useComicSearch from './utils/use-comic-search';
 import { Loader } from './components/Loader';
 import './App.scss';
@@ -13,7 +13,6 @@ export default function App() {
   const [openedComic, setOpenedComic] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedComics, setSelectedComics] = useState(new Set());
-  const [mailContent, setMailContent] = useState('');
   const [showMailForm, setShowMailForm] = useState(false);
 
   const {
@@ -81,23 +80,6 @@ export default function App() {
     setShowMailForm(false);
   }
 
-  useEffect(() => {
-    // Devido ao serviço de e-mail utilizado, foi necessário incluir o html do corpo do e-mail em uma textarea
-    const getMailContent = () => {
-      let content = '<ul style="padding: 0; list-style:none;">';
-      selectedComics.forEach(comic => {
-        content += `<li style="margin: 8px;">
-        <img src=${comic.thumbnail.path}.${comic.thumbnail.extension} alt=${comic.title} width="200px" />
-        <br/>
-        <span style="margin: 8px 0 16px 0;">${comic.title}</span>
-        </li>`;
-      });
-      content += '</ul>';
-      return content;
-    }
-    setMailContent(getMailContent())
-  }, [selectedComics]);
-
   return (
     <div>
       <SearchInput onChange={handleSearch}></SearchInput>
@@ -106,14 +88,23 @@ export default function App() {
           <Loader></Loader>
         )
       }
-      <div>{error && (<h5>Ocorreu um erro ao se comunicar com o servidor da Marvel</h5>)}</div>
+      {
+        error && (
+          <h5>Ocorreu um erro ao se comunicar com o servidor da Marvel</h5>
+        )
+      }
       {
         !loading && !error && comics.length === 0 && (
           <h5>Nenhum quadrinho encontrado</h5>
         )
       }
       {
-        openedComic && (<ComicDetails comic={openedComic} onClose={handleDetailsClose} onSelect={handleSelectionClose}></ComicDetails>)
+        openedComic && (
+          <ComicDetails
+            comic={openedComic}
+            onClose={handleDetailsClose}
+            onSelect={handleSelectionClose}></ComicDetails>
+        )
       }
       <Comics
         comics={comics}
@@ -121,6 +112,8 @@ export default function App() {
         checkSelectedComic={checkSelectedComic}
         handleSelection={handleSelection}
         handleShowDetails={handleShowDetails}></Comics>
+        
+      <div className="loader-inline">{(loading && comics.length > 0) && 'Carregando mais...'}</div>
 
       {
         selectedComics.size > 0 && (
@@ -134,7 +127,7 @@ export default function App() {
         showMailForm && (
           <EmailForm
             onCancelSendMail={handleCloseMailForm}
-            mailContent={mailContent}></EmailForm>
+            selectedComics={selectedComics}></EmailForm>
         )
       }
     </div>

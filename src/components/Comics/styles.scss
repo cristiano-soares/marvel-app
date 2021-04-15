@@ -2,6 +2,7 @@ $marvelBrandColor: #e62429;
 .comics-wrapper {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .comic {
     display: flex;
@@ -24,8 +25,12 @@ $marvelBrandColor: #e62429;
         background-color: $marvelBrandColor;
         color: #fff;
 
-        a {
+        .comic-title {
             color: #fff;
+            &:hover {
+                color: #fff;
+                background-color: transparent;
+            }
         }
     }
 
@@ -34,6 +39,14 @@ $marvelBrandColor: #e62429;
         font-family: "Comic Neue", sans-serif;
         font-size: 1.5rem;
         text-align: center;
+        color: #202020;
+        text-transform: unset;
+        outline: none;
+        border-color: transparent;
+        &:hover {
+            color: $marvelBrandColor;
+            text-decoration: underline;
+        }
     }
 
     .comic-cover {

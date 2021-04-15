@@ -1,5 +1,5 @@
 
-$color: #e62429;
+$marvelBrandColor: #e62429;
 $bLeft: 99952px;
 $left: 99973px;
 $aLeft: 99995px;
@@ -12,9 +12,9 @@ $size: 20px;
     height: $size;
     margin-left: 52px;
     border-radius: 10px;
-    background-color: $color;
-    color: $color;
-    box-shadow: $left 0 0 -5px $color;
+    background-color: $marvelBrandColor;
+    color: $marvelBrandColor;
+    box-shadow: $left 0 0 -5px $marvelBrandColor;
     animation: grow 1.6s infinite ease-in-out;
     animation-delay: 0.25s;
     vertical-align: middle;
@@ -29,18 +29,18 @@ $size: 20px;
         width: $size;
         height: $size;
         border-radius: 10px;
-        background-color: $color;
-        color: $color;
+        background-color: $marvelBrandColor;
+        color: $marvelBrandColor;
     }
 
     &::before {
-        box-shadow: $bLeft 0 0 -5px $color;
+        box-shadow: $bLeft 0 0 -5px $marvelBrandColor;
         animation: growBefore 1.6s infinite ease-in-out;
         animation-delay: 0s;
     }
 
     &::after {
-        box-shadow: $aLeft 0 0 -5px $color;
+        box-shadow: $aLeft 0 0 -5px $marvelBrandColor;
         animation: growAfter 1.6s infinite ease-in-out;
         animation-delay: 0.5s;
     }
@@ -66,39 +66,39 @@ $size: 20px;
 
 @keyframes growBefore {
     0% {
-        box-shadow: $bLeft 0 0 -5px $color;
+        box-shadow: $bLeft 0 0 -5px $marvelBrandColor;
     }
     30% {
-        box-shadow: $bLeft 0 0 2px $color;
+        box-shadow: $bLeft 0 0 2px $marvelBrandColor;
     }
     60%,
     100% {
-        box-shadow: $bLeft 0 0 -5px $color;
+        box-shadow: $bLeft 0 0 -5px $marvelBrandColor;
     }
 }
 
 @keyframes grow {
     0% {
-        box-shadow: $left 0 0 -5px $color;
+        box-shadow: $left 0 0 -5px $marvelBrandColor;
     }
     30% {
-        box-shadow: $left 0 0 2px $color;
+        box-shadow: $left 0 0 2px $marvelBrandColor;
     }
     60%,
     100% {
-        box-shadow: $left 0 0 -5px $color;
+        box-shadow: $left 0 0 -5px $marvelBrandColor;
     }
 }
 
 @keyframes growAfter {
     0% {
-        box-shadow: $aLeft 0 0 -5px $color;
+        box-shadow: $aLeft 0 0 -5px $marvelBrandColor;
     }
     30% {
-        box-shadow: $aLeft 0 0 2px $color;
+        box-shadow: $aLeft 0 0 2px $marvelBrandColor;
     }
     60%,
     100% {
-        box-shadow: $aLeft 0 0 -5px $color;
+        box-shadow: $aLeft 0 0 -5px $marvelBrandColor;
     }
 }

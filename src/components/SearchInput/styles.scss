@@ -1,3 +1,4 @@
+$marvelBrandColor: #e62429;
 .search-wrapper {
     display: flex;
     justify-content: center;
@@ -13,10 +14,6 @@
 
     &:focus {
         outline: none;
-        border-color: #e62429;
-    }
-
-    &::placeholder {
-        font-family: "Comic Neue", sans-serif;
+        border-color: $marvelBrandColor;
     }
 }
