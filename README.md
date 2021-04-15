@@ -1,6 +1,8 @@
 # Sobre o projeto
 
-Este projeto lista os quadrinhos da Marvel e permite que o usuário selecione um ou mais itens e os envie por e-mail
+Este projeto lista os quadrinhos da Marvel e permite que o usuário selecione um ou mais itens e os envie por e-mail.
+
+Você pode acessá-lo através deste [link](https://cristiano-soares.github.io/marvel-app/).
 
 ## Instruções
 
